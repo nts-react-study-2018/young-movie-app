@@ -5,8 +5,8 @@ class Movie extends Component {
   render() {
     return (
       <li>
-        <h2>Movie</h2>
-        <MoviePoster/>
+        <h2>{this.props.title}</h2>
+        <MoviePoster poster={this.props.poster}/>
       </li>
     );
   }
@@ -16,7 +16,7 @@ class MoviePoster extends Component {
   render() {
     return (
       <div>
-        <img src="https://pbs.twimg.com/media/C_j4udWXYAEQ_Jv.jpg" width="150" alt=""/>
+        <img src={this.props.poster} width="200" alt=""/>
       </div>
     );
   }
