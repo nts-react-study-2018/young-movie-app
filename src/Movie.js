@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import './Movie.css';
 
@@ -17,7 +17,7 @@ function Movie({title, poster}) {
 function MoviePoster({poster}) {
   return (
     <div>
-      <img src={poster} width="200" alt=""/>
+      <img src={poster} width="300" alt=""/>
     </div>
   )
 }

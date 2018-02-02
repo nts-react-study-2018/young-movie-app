@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import Movie from './Movie';
+import URLs from './URLs';
 
 class App extends Component {
   constructor(props) {
@@ -11,20 +12,35 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log(fetch('https://api.themoviedb.org/3/movie/top_rated?api_key=52ee229af86240d8b73edfe0864260be&language=en-US&page=1'));
+   this._getMovies();
   }
 
   _renderMovies = () => {
     const movies = this.state.movies.map((item, index) => {
-      return <Movie {...item} />
+      return <Movie title={item.title} poster={`${URLs.poster}${item.poster_path}`} key={item.id} />
     });
     return movies;
+  }
+
+  _getMovies = async () => {
+    this.setState({
+      movies: await this._callAPI(),
+    });
+  }
+
+  _callAPI = () => {
+    return fetch(URLs.API_top_rated)
+      .then(res => res.json())
+      .then(json => json.results)
+      .catch(err => console.log(err));
   }
 
   render() {
     return (
       <div className="App">
-        {this.state.movies.length > 0 ? this._renderMovies() : 'Loading'}
+        {this.state.movies.length > 0
+          ? this._renderMovies()
+          : 'Loading'}
       </div>
     );
   }
