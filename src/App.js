@@ -37,7 +37,7 @@ class App extends Component {
 
   _renderMovies = () => {
     const movies = this.state.movies.map((item, index) => {
-      return <Movie title={item.title} poster={item.poster} key={`movie_${index+1}`} />
+      return <Movie {...item} />
     });
     return movies;
   }
