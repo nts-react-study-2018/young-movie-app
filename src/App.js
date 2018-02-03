@@ -7,50 +7,76 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.genres = this._getGenres();
     this.state = {
-      movies: [],
+      genres: {},
+      movies: {},
     };
   }
 
+  //TODO: init 함수 만들어서 this._initGenres() 다음에 this._getMovies() 실행되도록 만들기
+  componentWillMount() {
+    this._initGenres();
+  }
+
   componentDidMount() {
-   this._getMovies();
+    this._getMovies();
+  }
+
+  _refineGenreObj = (temp_array) => {
+    let temp_obj = {};
+    for (let i=0;i<temp_array.length;i++) {
+      let genre_id = temp_array[i].id;
+      let genre_name = temp_array[i].name;
+      temp_obj[genre_id] = genre_name;
+    }
+    return temp_obj;
+  }
+
+  _convertGenreIDtoName = (movies) => {
+    for(let i=0;i<movies.length;i++) {
+      let temp_array = movies[i].genre_ids;
+      temp_array = temp_array.map((id) => {
+        console.log(id);
+      })
+    }
+    return movies;
   }
 
   _callAPI = (URL, key) => {
     return fetch(URL)
       .then(res => res.json())
       .then(json => json[key])
+      .then(result => {
+        if(URL===URLs.API_top_rated) {
+          const movies = this._convertGenreIDtoName(result);
+          this.setState({ movies });
+        }
+        return result;
+      })
       .catch(err => console.log(err));
   }
 
   _getGenres = async () => {
-    let temp_array = await this._callAPI(URLs.genres, "genres");
-    let temp_obj = {};
-    temp_array.map((item) => {
-      temp_obj[item.id] = item.name;
-    })
-    return temp_obj;
+    return await this._callAPI(URLs.genres, "genres");
   }
 
   _getMovies = async () => {
-    let movies = await this._callAPI(URLs.API_top_rated, "results");
-    movies.map((item) => {
-      item.genre_ids.map((item) => {
-        console.log(this.genres[item]);
-      })
-    });
-    this.setState({
-      movies: movies,
-    });
+    await this._callAPI(URLs.API_top_rated, "results");
   }
 
   _renderMovies = () => {
     const movies = this.state.movies.map((item, index) => {
-      console.log(item);
       return <Movie title={item.title} poster={`${URLs.poster}${item.poster_path}`} key={item.id} />
     });
     return movies;
+  }
+
+  _initGenres = () => {
+    this._getGenres()
+      .then(result => {
+        const genres = this._refineGenreObj(result);
+        this.setState({ genres });
+      }).then(result => {console.log(this.state.genres)});
   }
 
   render() {
