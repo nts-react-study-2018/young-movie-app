@@ -22,20 +22,20 @@
     padding: 10px;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: 200;
-    font-size: 18px;
+    font-size: 15px;
+    line-height: 20px;
     letter-spacing: 0.5px;
-    text-decoration: underline;
+    border-bottom: 3px solid currentColor;
+}
+
+.header .appMenu__link + .appMenu__link {
+    margin-left: 15px;
+}
+
+.header .appMenu__link:hover {
+    color: #ff0063;
 }
 
 .header .appMenu__link.is_selected {
     color: #ff0063;
-    font-weight: 600;
-}
-
-.header .appMenu__link + .appMenu__link::before {
-    content: '/';
-    font-size: 20px;
-    display: inline-block;
-    vertical-align: -1px;
-    margin-right: 20px;
 }

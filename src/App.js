@@ -10,13 +10,24 @@ class App extends Component {
 
     this.state = {
       genres: {},
-      movies: {},
+      movies_popular: {},
+      "movies_top-rated": {},
+      "movies_now-playing": {},
       current_menu: "",
+      has_api_call_finished: false,
     };
+  }
+
+  componentWillMount() {
+    this.setState({ current_menu: this.props.match.params.current_menu });
   }
 
   componentDidMount() {
     this._init();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ current_menu: nextProps.match.params.current_menu });
   }
 
   /*
@@ -55,8 +66,8 @@ class App extends Component {
     return await this._callAPI(URLs.genres, "genres");
   }
 
-  _getMovies = async () => {
-    return await this._callAPI(URLs.API_popular, "results");
+  _getMovies = async (API_name) => {
+    return await this._callAPI(API_name, "results");
   }
   
   /*
@@ -66,18 +77,37 @@ class App extends Component {
     this._getGenres()
       .then(genres => {
         const refined_genres = this._refineGenreObj(genres);
-        this.setState({ genres: refined_genres });
         console.log('got genres');
+        this.setState({ genres: refined_genres });
       })
       .then(() => {
-        const movies = this._getMovies();
-        console.log('got movies');
-        return movies;
+        const popular_movies = this._getMovies(URLs.API_popular)
+        return popular_movies;
       })
       .then(movies => {
-        const refined_movies = this._convertGenreidtoName(movies);
-        this.setState({ movies: refined_movies });
-        console.log(this.state.movies);
+        const popular_refined_movies = this._convertGenreidtoName(movies);
+        this.setState({ movies_popular: popular_refined_movies });
+        console.log('got popular movies');
+      })
+      .then(() => {
+        const top_rated_movies = this._getMovies(URLs.API_top_rated)
+        return top_rated_movies;
+      })
+      .then(movies => {
+        const top_rated_refined_movies = this._convertGenreidtoName(movies);
+        this.setState({ movies_top_rated: top_rated_refined_movies });
+        console.log(this.state.movies_top_rated);
+      })
+      .then(() => {
+        const now_playing_movies = this._getMovies(URLs.API_now_playing)
+        return now_playing_movies;
+      })
+      .then(movies => {
+        const now_playing_refined_movies = this._convertGenreidtoName(movies);
+        this.setState({ movies_now_playing: now_playing_refined_movies });
+        console.log('got now playing movies');
+        this.setState({ has_api_call_finished: true });
+        console.log('call finished');
       })
       .catch(err => console.error(err));
   }
@@ -85,8 +115,57 @@ class App extends Component {
   /*
     UI Rendering
   */
-  _renderMovies = () => {
-    const movies = this.state.movies.map((item, index) => {
+  _renderMovies = (current_menu) => {
+    let result = [];
+
+    switch(current_menu) {
+      case "popular":
+      default:
+        result = this._makePopularMoviesComponents();
+        break;
+      case "top-rated":
+        result = this._makeTopRatedMoviesComponents();
+        break;
+      case "now-playing":
+        result = this._makeNowPlayingMoviesComponents();
+        break;
+    }
+
+    return result;
+  }
+
+  _makePopularMoviesComponents = () => {
+    let movies = this.state.movies_popular.map((item, index) => {
+      return (
+        <Movie
+          title={item.title}
+          poster={`${URLs.poster}${item.poster_path}`}
+          genres={item.genre_ids}
+          overview={item.overview}
+          key={`movie_${item.id}`}
+          parentKey = {item.id} />
+      )
+    });
+    return movies;
+  }
+
+  _makeTopRatedMoviesComponents = () => {
+    let movies = this.state.movies_top_rated.map((item, index) => {
+      return (
+        <Movie
+          title={item.title}
+          poster={`${URLs.poster}${item.poster_path}`}
+          genres={item.genre_ids}
+          overview={item.overview}
+          key={`movie_${item.id}`}
+          parentKey = {item.id} />
+      )
+    });
+    return movies;
+  }
+
+  _makeNowPlayingMoviesComponents = () => {
+    let movies = this.state.movies_now_playing.map((item, index) => {
       return (
         <Movie
           title={item.title}
@@ -101,7 +180,7 @@ class App extends Component {
   }
 
   render() {
-    let hasMovies = (this.state.movies.length > 0);
+    let hasMovies = this.state.has_api_call_finished;
 
     return (
       <div>
@@ -110,8 +189,8 @@ class App extends Component {
           hasMovies
           ? "App"
           : "App--loading"}>
-          {hasMovies
-            ? this._renderMovies()
+            {hasMovies
+            ? this._renderMovies(this.state.current_menu)
             : 'Loading'}
         </div>
       </div>
