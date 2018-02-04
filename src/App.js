@@ -75,6 +75,7 @@ class App extends Component {
       .then(movies => {
         const refined_movies = this._convertGenreidtoName(movies);
         this.setState({ movies: refined_movies });
+        console.log(this.state.movies);
       })
       .catch(err => console.error(err));
   }
@@ -84,7 +85,15 @@ class App extends Component {
   */
   _renderMovies = () => {
     const movies = this.state.movies.map((item, index) => {
-      return <Movie title={item.title} poster={`${URLs.poster}${item.poster_path}`} key={item.id} />
+      return (
+        <Movie
+          title={item.title}
+          poster={`${URLs.poster}${item.poster_path}`}
+          genres={item.genre_ids}
+          overview={item.overview}
+          key={`movie_${item.id}`}
+          parentKey = {item.id} />
+      )
     });
     return movies;
   }
