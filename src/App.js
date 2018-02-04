@@ -99,9 +99,14 @@ class App extends Component {
   }
 
   render() {
+    let hasMovies = (this.state.movies.length > 0);
+
     return (
-      <div className="App">
-        {this.state.movies.length > 0
+      <div className={
+        hasMovies
+        ? "App"
+        : "App--loading"}>
+        {hasMovies
           ? this._renderMovies()
           : 'Loading'}
       </div>

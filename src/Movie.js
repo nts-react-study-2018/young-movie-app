@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import LinesEllipsis from 'react-lines-ellipsis';
 import './Movie.css';
 
 function _renderGenres(genre_array, key) {
   const result = genre_array.map((item, index) => {
     return (
       <li
-        className="item_movie_genre"
+        className="Movie__Genre"
         key={`${key}_genre_${index+1}`}>{item}</li>
     )
   });
@@ -24,14 +25,22 @@ function Movie({
   parentKey
 }) {
   return (
-    <div className="item_movie">
-      <div className="item_movie_col">
-        <h2 className="item_movie_title">{title}</h2>
-        <MovieGenres genres={genres} parentKey={parentKey}/>
-        <p className="item_movie_overview">{overview}</p>
-      </div>
-      <div className="item_movie_col">
+    <div className="Movie">
+      <div className="Movie__Column">
         <MoviePoster poster={poster}/>
+      </div>
+      <div className="Movie__Column">
+        <h2 className="title">{title}</h2>
+        <MovieGenres genres={genres} parentKey={parentKey}/>
+        <div className="Movie__Synopsis">
+          <LinesEllipsis
+            text={overview}
+            maxLine='5'
+            ellipsis='...'
+            trimRight
+            basedOn='letters'
+            />
+        </div>
       </div>
     </div>
   )
@@ -39,22 +48,18 @@ function Movie({
 
 function MoviePoster({ poster }) {
   return (
-    <div className="item_movie_poster_container">
-      <h3>Poster</h3>
-      <img
-        className="item_movie_poster"
+    <img
+        className="Movie__Poster"
         src={poster}
-        width="300"
+        width="100%"
         alt=""/>
-    </div>
   )
 }
 
 function MovieGenres({ genres, parentKey }) {
   return (
-    <div className="item_movie_genre_container">
-      <h3>Genres</h3>
-      <ul className="item_movie_genre_list">
+    <div className="Movie__Genres">
+      <ul aria-label="Movie Genres">
         {_renderGenres(genres, parentKey)}
       </ul>
     </div>
