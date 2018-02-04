@@ -13,15 +13,13 @@ class App extends Component {
     };
   }
 
-  //TODO: init 함수 만들어서 this._initGenres() 다음에 this._getMovies() 실행되도록 만들기
-  componentWillMount() {
-    this._initGenres();
-  }
-
   componentDidMount() {
-    this._getMovies();
+    this._init();
   }
 
+  /*
+    Data Refinement
+  */
   _refineGenreObj = (temp_array) => {
     let temp_obj = {};
     for (let i=0;i<temp_array.length;i++) {
@@ -32,27 +30,22 @@ class App extends Component {
     return temp_obj;
   }
 
-  _convertGenreIDtoName = (movies) => {
+  _convertGenreidtoName = (movies) => {
     for(let i=0;i<movies.length;i++) {
-      let temp_array = movies[i].genre_ids;
-      temp_array = temp_array.map((id) => {
-        console.log(id);
+      movies[i].genre_ids = movies[i].genre_ids.map((id) => {
+        return this.state.genres[id];
       })
     }
     return movies;
   }
 
+  /*
+    API Calls
+  */
   _callAPI = (URL, key) => {
     return fetch(URL)
       .then(res => res.json())
       .then(json => json[key])
-      .then(result => {
-        if(URL===URLs.API_top_rated) {
-          const movies = this._convertGenreIDtoName(result);
-          this.setState({ movies });
-        }
-        return result;
-      })
       .catch(err => console.log(err));
   }
 
@@ -61,22 +54,39 @@ class App extends Component {
   }
 
   _getMovies = async () => {
-    await this._callAPI(URLs.API_top_rated, "results");
+    return await this._callAPI(URLs.API_top_rated, "results");
+  }
+  
+  /*
+    Data Initalization
+  */
+  _init = () => {
+    this._getGenres()
+      .then(genres => {
+        const refined_genres = this._refineGenreObj(genres);
+        this.setState({ genres: refined_genres });
+        console.log('got genres');
+      })
+      .then(() => {
+        const movies = this._getMovies();
+        console.log('got movies');
+        return movies;
+      })
+      .then(movies => {
+        const refined_movies = this._convertGenreidtoName(movies);
+        this.setState({ movies: refined_movies });
+      })
+      .catch(err => console.error(err));
   }
 
+  /*
+    UI Rendering
+  */
   _renderMovies = () => {
     const movies = this.state.movies.map((item, index) => {
       return <Movie title={item.title} poster={`${URLs.poster}${item.poster_path}`} key={item.id} />
     });
     return movies;
-  }
-
-  _initGenres = () => {
-    this._getGenres()
-      .then(result => {
-        const genres = this._refineGenreObj(result);
-        this.setState({ genres });
-      }).then(result => {console.log(this.state.genres)});
   }
 
   render() {
