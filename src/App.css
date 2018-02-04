@@ -1,9 +1,10 @@
 @charset "utf-8";
 
 .App {
-  padding: 50px;
+  padding: 0 50px;
   display: flex;
-  justify-content: space-around;
+  flex-direction: row;
+  justify-content: center;
   flex-wrap: wrap;
   font-size: 14px;
   line-height: 1.2;

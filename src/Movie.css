@@ -1,12 +1,9 @@
 .Movie {
+    display: flex;
+    flex-direction: row;
     background-color: #fff;
     width: 40%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-bottom:50px;
-    text-overflow: ellipsis;
+    margin: 2% 2% 50px;
     padding: 20px;
     box-shadow: 0 8px 38px rgba(133, 133, 133, 0.3), 0 5px 12px rgba(133, 133, 133,0.22);
 }
@@ -29,6 +26,8 @@
     line-height: 23px;
     font-weight: 600;
     padding-bottom: 5px;
+    font-family: Helvetica, Arial, sans-serif;
+    letter-spacing: 0.5px;
 }
 
 .Movie .Movie__Genres {
@@ -39,7 +38,7 @@
 
 .Movie__Genres .Movie__Genre{
     font-size: 12px;
-    line-height: 18px;
+    line-height: 15px;
     font-weight: 300;
     color : #B4B5BD;
 }

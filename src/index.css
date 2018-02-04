@@ -19,3 +19,8 @@ li {
   display: inline-block;
   list-style: none;
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

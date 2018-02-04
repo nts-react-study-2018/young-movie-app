@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import Header from './Header';
 import Movie from './Movie';
 import URLs from './URLs';
 
@@ -10,6 +11,7 @@ class App extends Component {
     this.state = {
       genres: {},
       movies: {},
+      current_menu: "",
     };
   }
 
@@ -54,7 +56,7 @@ class App extends Component {
   }
 
   _getMovies = async () => {
-    return await this._callAPI(URLs.API_top_rated, "results");
+    return await this._callAPI(URLs.API_popular, "results");
   }
   
   /*
@@ -102,13 +104,16 @@ class App extends Component {
     let hasMovies = (this.state.movies.length > 0);
 
     return (
-      <div className={
-        hasMovies
-        ? "App"
-        : "App--loading"}>
-        {hasMovies
-          ? this._renderMovies()
-          : 'Loading'}
+      <div>
+        <Header />
+        <div className={
+          hasMovies
+          ? "App"
+          : "App--loading"}>
+          {hasMovies
+            ? this._renderMovies()
+            : 'Loading'}
+        </div>
       </div>
     );
   }
