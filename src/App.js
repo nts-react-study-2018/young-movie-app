@@ -19,7 +19,9 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.setState({ current_menu: this.props.match.params.current_menu });
+    this.setState({
+      current_menu: this.props.match.params.current_menu
+    });
   }
 
   componentDidMount() {
@@ -27,7 +29,9 @@ class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ current_menu: nextProps.match.params.current_menu });
+    this.setState({
+      current_menu: nextProps.match.params.current_menu
+    });
   }
 
   /*
@@ -45,9 +49,11 @@ class App extends Component {
 
   _convertGenreidtoName = (movies) => {
     for(let i=0;i<movies.length;i++) {
-      movies[i].genre_ids = movies[i].genre_ids.map((id) => {
-        return this.state.genres[id];
-      })
+      movies[i].genre_ids = movies[i].genre_ids.map(
+        (id) => {
+          return this.state.genres[id];
+        }
+      )
     }
     return movies;
   }
@@ -78,7 +84,9 @@ class App extends Component {
       .then(genres => {
         const refined_genres = this._refineGenreObj(genres);
         console.log('got genres');
-        this.setState({ genres: refined_genres });
+        this.setState({
+          genres: refined_genres
+        });
       })
       .then(() => {
         const popular_movies = this._getMovies(URLs.API_popular)
@@ -86,7 +94,9 @@ class App extends Component {
       })
       .then(movies => {
         const popular_refined_movies = this._convertGenreidtoName(movies);
-        this.setState({ movies_popular: popular_refined_movies });
+        this.setState({
+          movies_popular: popular_refined_movies
+        });
         console.log('got popular movies');
       })
       .then(() => {
@@ -95,7 +105,9 @@ class App extends Component {
       })
       .then(movies => {
         const top_rated_refined_movies = this._convertGenreidtoName(movies);
-        this.setState({ movies_top_rated: top_rated_refined_movies });
+        this.setState({
+          movies_top_rated: top_rated_refined_movies
+        });
         console.log(this.state.movies_top_rated);
       })
       .then(() => {
@@ -104,9 +116,13 @@ class App extends Component {
       })
       .then(movies => {
         const now_playing_refined_movies = this._convertGenreidtoName(movies);
-        this.setState({ movies_now_playing: now_playing_refined_movies });
+        this.setState({
+          movies_now_playing: now_playing_refined_movies
+        });
         console.log('got now playing movies');
-        this.setState({ has_api_call_finished: true });
+        this.setState({
+          has_api_call_finished: true
+        });
         console.log('call finished');
       })
       .catch(err => console.error(err));
@@ -135,47 +151,53 @@ class App extends Component {
   }
 
   _makePopularMoviesComponents = () => {
-    let movies = this.state.movies_popular.map((item, index) => {
-      return (
-        <Movie
-          title={item.title}
-          poster={`${URLs.poster}${item.poster_path}`}
-          genres={item.genre_ids}
-          overview={item.overview}
-          key={`movie_${item.id}`}
-          parentKey = {item.id} />
-      )
-    });
+    let movies = this.state.movies_popular.map(
+      (item, index) => {
+        return (
+          <Movie
+            title={item.title}
+            poster={`${URLs.poster}${item.poster_path}`}
+            genres={item.genre_ids}
+            overview={item.overview}
+            key={`movie_${item.id}`}
+            parentKey = {item.id} />
+        )
+      }
+    );
     return movies;
   }
 
   _makeTopRatedMoviesComponents = () => {
-    let movies = this.state.movies_top_rated.map((item, index) => {
-      return (
-        <Movie
-          title={item.title}
-          poster={`${URLs.poster}${item.poster_path}`}
-          genres={item.genre_ids}
-          overview={item.overview}
-          key={`movie_${item.id}`}
-          parentKey = {item.id} />
-      )
-    });
+    let movies = this.state.movies_top_rated.map(
+      (item, index) => {
+        return (
+          <Movie
+            title={item.title}
+            poster={`${URLs.poster}${item.poster_path}`}
+            genres={item.genre_ids}
+            overview={item.overview}
+            key={`movie_${item.id}`}
+            parentKey = {item.id} />
+        )
+      }
+    );
     return movies;
   }
 
   _makeNowPlayingMoviesComponents = () => {
-    let movies = this.state.movies_now_playing.map((item, index) => {
-      return (
-        <Movie
-          title={item.title}
-          poster={`${URLs.poster}${item.poster_path}`}
-          genres={item.genre_ids}
-          overview={item.overview}
-          key={`movie_${item.id}`}
-          parentKey = {item.id} />
-      )
-    });
+    let movies = this.state.movies_now_playing.map(
+      (item, index) => {
+        return (
+          <Movie
+            title={item.title}
+            poster={`${URLs.poster}${item.poster_path}`}
+            genres={item.genre_ids}
+            overview={item.overview}
+            key={`movie_${item.id}`}
+            parentKey = {item.id} />
+        )
+      }
+    );
     return movies;
   }
 
