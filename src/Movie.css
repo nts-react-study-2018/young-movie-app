@@ -1,4 +1,6 @@
 .Movie {
+    min-width: 211px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: row;
     background-color: #fff;

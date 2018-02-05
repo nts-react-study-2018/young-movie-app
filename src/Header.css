@@ -15,27 +15,32 @@
 
 .header .appMenu {
     padding: 15px 0 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .header .appMenu__link {
+    width: 33.33%;
+    box-sizing: border-box;
     display: inline-block;
     padding: 10px;
     font-family: Helvetica, Arial, sans-serif;
-    font-weight: 200;
-    font-size: 15px;
-    line-height: 20px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
     letter-spacing: 0.5px;
-    border-bottom: 3px solid currentColor;
+    border-bottom: 8px double currentColor;
 }
 
-.header .appMenu__link + .appMenu__link {
-    margin-left: 15px;
-}
-
-.header .appMenu__link:hover {
-    color: #ff0063;
-}
-
+.header .appMenu__link:hover,
 .header .appMenu__link.is_selected {
     color: #ff0063;
+}
+
+@media screen and (min-width:320px) and (max-width:667px) {
+    .header .appMenu__link {
+        font-size: 15px;
+        line-height: 18px;
+        border-bottom-width: 5px;
+    }
 }

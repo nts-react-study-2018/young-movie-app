@@ -9,13 +9,13 @@ class Header extends Component {
                 <h1 className="appName">Poster Kiosk</h1>
                 <div className="appMenu">
                     <NavLink
-                        to="/popular"
+                        to="/movies/popular"
                         className="appMenu__link"
                         activeClassName="is_selected">Popular</NavLink>
-                    <NavLink to="/top-rated"
+                    <NavLink to="/movies/top-rated"
                         className="appMenu__link"
                         activeClassName="is_selected">Top Rated</NavLink>
-                    <NavLink to="/now-playing"
+                    <NavLink to="/movies/now-playing"
                         className="appMenu__link"
                         activeClassName="is_selected">Now Playing</NavLink>
                 </div>
